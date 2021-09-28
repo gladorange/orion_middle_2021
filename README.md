@@ -1,6 +1,6 @@
 Проект для домашних заданий для группы подготовки Java SE
 
-Группа в Телеграме: https://t.me/joinchat/UmjdARhcybqs6Hf_6IzISw 
+Группа в Телеграме: https://t.me/joinchat/GFzJutf4hEHojMhL
 
 Правила оформления заданий:
 
