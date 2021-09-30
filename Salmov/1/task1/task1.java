@@ -1,7 +1,10 @@
+package task1;
+
 //Домашнее задание к лекции 1
 //Салмов Евгений
 
-//import java.util.Scanner;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class task1 {
     public static void main(String[] args) {
@@ -10,9 +13,16 @@ public class task1 {
         int intVar2 = 12;
         //значения переменных вводим с клавиатуры
         //для этого раскомментировать следующие 3 строки и строку импорта
-        //Scanner myScan = new Scanner(System.in);
-        //intVar1 = myScan.nextInt();
-        //intVar2 = myScan.nextInt();
+        try {
+            Scanner myScan = new Scanner(System.in);
+            System.out.print("Введите первое число: ");
+            intVar1 = myScan.nextInt();
+            System.out.print("Введите второе число: ");
+            intVar2 = myScan.nextInt();
+        } catch (InputMismatchException e) {
+            System.err.println("Неправильный формат строки!");
+            return;
+        }
 
         //значения передаём как аргументы командной строки
         //для этого раскомментировать следующие 18 строк
@@ -24,6 +34,7 @@ public class task1 {
                     i++;
                 }catch (NumberFormatException e) {
                     System.err.println("Неправильный формат строки!");
+                    return;
                 }
             } else {
                 try {
@@ -31,6 +42,7 @@ public class task1 {
                     break;
                 }catch (NumberFormatException e) {
                     System.err.println("Неправильный формат строки!");
+                    return;
                 }
             }
         }*/
