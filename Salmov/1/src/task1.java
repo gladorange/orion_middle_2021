@@ -1,3 +1,6 @@
+//Домашнее задание к лекции 1
+//Салмов Евгений
+
 //import java.util.Scanner;
 
 public class task1 {
