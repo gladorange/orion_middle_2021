@@ -9,6 +9,7 @@ public class Main {
 
 
     public static String compareNumbers(Integer a, Integer b) {
+        System.out.println(a+b);
         return (a > b) ? "Число " + a+ " больше " + b : "Число " + a + " меньше " + b;
     }
 }
