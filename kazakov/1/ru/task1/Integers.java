@@ -12,10 +12,10 @@ package ru.task1;
 import java.util.Scanner;
 
 public class Integers {
+	static Integer val1;
+	static Integer val2;
 
 	public static void main(String[] args) {
-		Integer val1;
-		Integer val2;
 
 		if (args.length >= 2) {
 			System.out.printf("Есть аргументы программы (%dшт., '%s' и '%s')- работаем с аргументами.\n",
@@ -23,13 +23,13 @@ public class Integers {
 			val1 = Integer.valueOf(args[0]);
 			val2 = Integer.valueOf(args[1]);
 		} else if (args.length == 1) {	//	мы должны предусмотреть все варианты :)
-			//	первое число готово:
-			val1 = Integer.valueOf(args[0]);
+			val1 = Integer.valueOf(args[0]);	//	первое число готово
 			try (Scanner myIntegerScanner = new Scanner(System.in)) {
 				System.out.printf("Первое число - аргумент: %s, введите второе число: ", args[0]);
 				val2 = myIntegerScanner.nextInt();  // Read val2
 			} catch (Exception e) {
 				System.out.println("Произошла ошибка при сканировании числа со стандартного ввода. Завершение работы программы.");
+				e.printStackTrace(System.out);
 				return;
 			}
 		} else {
@@ -40,6 +40,7 @@ public class Integers {
 				val2 = myIntegerScanner.nextInt();  // Read val2
 			} catch (Exception e) {
 				System.out.println("Произошла ошибка при сканировании числа со стандартного ввода. Завершение работы программы.");
+				e.printStackTrace(System.out);
 				return;
 			}
 		}
