@@ -8,7 +8,7 @@ public class AttractionOfOpposites {
     {
         int[] array = getRandomArrayBySize(10,Integer.MIN_VALUE,Integer.MAX_VALUE);
 
-        showIntArray(array);
+        showArray(array);
 
         for (int j=0, i=1; i< array.length; j++,i++) {
 
@@ -29,7 +29,7 @@ public class AttractionOfOpposites {
         return randomArray;
     }
 
-    private static void showIntArray(int[] array)
+    private static void showArray(int[] array)
     {
         System.out.printf("%s \n", Arrays.toString(array) );
     }
