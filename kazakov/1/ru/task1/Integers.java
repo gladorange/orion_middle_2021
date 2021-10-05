@@ -17,18 +17,19 @@ public class Integers {
 
 	public static void main(String[] args) {
 
-		if (args.length >= 2) {
+		if (args.length == 2) {
 			System.out.printf("Есть аргументы программы (%dшт., '%s' и '%s')- работаем с аргументами.\n",
 					args.length, args[0], args[1]);
 			val1 = Integer.valueOf(args[0]);
 			val2 = Integer.valueOf(args[1]);
 		} else if (args.length == 1) {	//	мы должны предусмотреть все варианты :)
-			val1 = Integer.valueOf(args[0]);	//	первое число готово
+			val1 = Integer.valueOf(args[0]);	//	первое число содержится в аргументе программы
 			try (Scanner myIntegerScanner = new Scanner(System.in)) {
 				System.out.printf("Первое число - аргумент: %s, введите второе число: ", args[0]);
 				val2 = myIntegerScanner.nextInt();  // Read val2
 			} catch (Exception e) {
-				System.out.println("Произошла ошибка при сканировании числа со стандартного ввода. Завершение работы программы.");
+				System.out.printf("Exception чтения Integer из stdin\nОписание exception: '%s'\nЗавершение работы программы\n",
+						e.getMessage());
 				e.printStackTrace(System.out);
 				return;
 			}
@@ -39,7 +40,8 @@ public class Integers {
 				System.out.print("Введите второе число: ");
 				val2 = myIntegerScanner.nextInt();  // Read val2
 			} catch (Exception e) {
-				System.out.println("Произошла ошибка при сканировании числа со стандартного ввода. Завершение работы программы.");
+				System.out.printf("Exception чтения Integer из stdin\nОписание exception: '%s'\nЗавершение работы программы\n",
+						e.getMessage());
 				e.printStackTrace(System.out);
 				return;
 			}
