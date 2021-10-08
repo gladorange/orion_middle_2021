@@ -5,9 +5,9 @@ public class App {
     public static void main(String[] arg) {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("Введите первый число: ");
+        System.out.println("Введите первое число: ");
         int a = scanner.nextInt();
-        System.out.println("Введите второй число: ")
+        System.out.println("Введите второе число: ");
         int b = scanner.nextInt();
 
         if(a > b) {
