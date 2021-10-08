@@ -1,6 +1,5 @@
 public class Variables {
 
-
     public static void main(String[] args) {
         String thisIsStringVariable = "42";
         String anotherVariable = "42";
