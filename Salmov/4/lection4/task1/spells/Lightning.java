@@ -12,19 +12,21 @@ public class Lightning extends Spell{
     static final int MIN_DAMAGE_POINTS = 10;
     static final int MAX_DAMAGE_POINTS = 30;
 
-    private int damagePoints;
-
     public Lightning(){
+        super((new Random()).nextInt(MAX_DAMAGE_POINTS-MIN_DAMAGE_POINTS)+MIN_DAMAGE_POINTS);
         setName("Молния");
-        Random random = new Random();
-        damagePoints = random.nextInt(MAX_DAMAGE_POINTS-MIN_DAMAGE_POINTS)+MIN_DAMAGE_POINTS;
     }
 
     @Override
     public void cast(Character[] characters, Character spellCaster) {
         int identifiedTarget = Helper.identifyTarget(characters, spellCaster);
-        int madeDamage = characters[identifiedTarget].spellCastedHandler(damagePoints);
+        int madeDamage = characters[identifiedTarget].spellCastedHandler(getEffectPoints());
         System.out.printf("%s ударяет по %s. Он получает %s урона.\n", getName(),
                 characters[identifiedTarget].getName(), madeDamage);
+    }
+
+    @Override
+    protected boolean checkCharacter(Character characterChecked, Character spellCaster, int indexChecked) {
+        return false;
     }
 }

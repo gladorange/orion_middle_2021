@@ -13,9 +13,18 @@ import lection4.task1.characters.Character;
 
 public abstract class Spell {
     private String name;
+    private final int effectPoints;
+
+    protected Spell(int effectPoints) {
+        this.effectPoints = effectPoints;
+    }
 
     public String getName() {
         return name;
+    }
+
+    public int getEffectPoints() {
+        return effectPoints;
     }
 
     protected void setName(String name) {
@@ -24,4 +33,18 @@ public abstract class Spell {
 
     public abstract void cast(Character[] characters, Character spellCaster);
 
+    protected abstract boolean checkCharacter(Character characterChecked, Character spellCaster, int indexChecked);
+
+    public void castMultiTarget(Character[] characters, Character spellCaster) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < characters.length; i++) {
+            if(checkCharacter(characters[i], spellCaster, i)){
+                s.append(characters[i].getName());
+                s.append(" (Урон:");
+                s.append(characters[i].spellCastedHandler(effectPoints));
+                s.append(") ");
+            }
+        }
+        System.out.printf("%s ударяет по %s\n", getName(), s);
+    }
 }

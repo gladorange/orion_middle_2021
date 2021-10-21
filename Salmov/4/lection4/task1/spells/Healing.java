@@ -15,19 +15,23 @@ public class Healing extends Spell{
     static final int MIN_HEALING_POINTS = 10;
     static final int MAX_HEALING_POINTS = 30;
 
-    private int healingPoints;
-
     public Healing(){
+        super((new Random()).nextInt(MAX_HEALING_POINTS-MIN_HEALING_POINTS)+MIN_HEALING_POINTS);
         setName("Исцеление");
         Random random = new Random();
-        healingPoints = random.nextInt(MAX_HEALING_POINTS-MIN_HEALING_POINTS)+MIN_HEALING_POINTS;
     }
 
     @Override
     public void cast(Character[] characters, Character spellCaster) {
-        int hp = Math.min( DEFAULT_HEALTH_POINTS-spellCaster.getHealthPoints(), healingPoints);
+        int hp = Math.min( DEFAULT_HEALTH_POINTS-spellCaster.getHealthPoints(), getEffectPoints());
         spellCaster.incHealthPoints(hp);
         System.out.printf("Маг %s исцелен на %s. Теперь у него %s здоровья.\n",spellCaster.getName(),
                 hp ,spellCaster.getHealthPoints());
     }
+
+    @Override
+    protected boolean checkCharacter(Character characterChecked, Character spellCaster, int indexChecked) {
+        return false;
+    }
+
 }

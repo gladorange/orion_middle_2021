@@ -49,9 +49,9 @@ public class Scene {
     }
 
     public void nextStep(){
-        for (int i = 0; i < characters.length; i++) {
-            if(characters[i]!=null) {
-                characters[i].doAction(characters);
+        for (Character character : characters) {
+            if (character != null) {
+                character.doAction(characters);
             }
         }
         removeDeadCharacters();
@@ -70,8 +70,8 @@ public class Scene {
 
     public int getCharactersOnScene(){
         int cnt = 0;
-        for (int i = 0; i < characters.length; i++) {
-            if(characters[i]!=null) {
+        for (Character character : characters) {
+            if (character != null) {
                 cnt++;
             }
         }
@@ -79,9 +79,9 @@ public class Scene {
     }
 
     public void showWinner(){
-        for (int i = 0; i < characters.length; i++) {
-            if(characters[i]!=null) {
-                characters[i].winningHandler();
+        for (Character character : characters) {
+            if (character != null) {
+                character.winningHandler();
             }
         }
     }

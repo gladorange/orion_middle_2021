@@ -16,7 +16,7 @@ public class Monster extends Character{
     static final int MIN_DIRECT_DAMAGE = 10;
     static final int MAX_DIRECT_DAMAGE = 30;
 
-    private int directDamage;
+    private final int directDamage;
 
     public Monster(String name) {
         super(name);

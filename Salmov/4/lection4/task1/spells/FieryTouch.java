@@ -12,12 +12,9 @@ public class FieryTouch extends Spell{
     static final int MIN_DAMAGE_POINTS = 10;
     static final int MAX_DAMAGE_POINTS = 30;
 
-    private int damagePoints;
-
     public FieryTouch(){
+        super((new Random()).nextInt(MAX_DAMAGE_POINTS-MIN_DAMAGE_POINTS)+MIN_DAMAGE_POINTS);
         setName("Огненное касание");
-        Random random = new Random();
-        damagePoints = random.nextInt(MAX_DAMAGE_POINTS-MIN_DAMAGE_POINTS)+MIN_DAMAGE_POINTS;
     }
 
     @Override
@@ -31,11 +28,16 @@ public class FieryTouch extends Spell{
         }
         if(myIndex>0 && characters[myIndex-1] !=null){
             System.out.printf("%s ударяет по %s. Урон: %s.\n", getName() , characters[myIndex-1].getName(),
-                    characters[myIndex-1].spellCastedHandler(damagePoints));
+                    characters[myIndex-1].spellCastedHandler(getEffectPoints()));
         }
         if((myIndex<characters.length-1) && characters[myIndex+1] !=null){
             System.out.printf("%s ударяет по %s. Урон: %s.\n", getName() , characters[myIndex+1].getName(),
-                    characters[myIndex+1].spellCastedHandler(damagePoints));
+                    characters[myIndex+1].spellCastedHandler(getEffectPoints()));
         }
+    }
+
+    @Override
+    protected boolean checkCharacter(Character characterChecked, Character spellCaster, int indexChecked) {
+        return false;
     }
 }
