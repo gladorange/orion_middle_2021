@@ -1,29 +1,29 @@
 package come.game.spell;
 
 import come.game.character.MagicianFactory;
+import come.game.scene.SceneFactory;
 
 public class HealingSpellFactory extends AbstractSpellFactory {
 
+
+
     public static class HealingSpell extends Spell {
 
-        MagicianFactory.Magician owner;
         private static final int HEALING_POWER = 30;
 
         public HealingSpell(MagicianFactory.Magician owner) {
-            this.name = "Исцеление";
-            this.owner = owner;
+            super("Исцеление", owner);
         }
 
         @Override
-        public void cast() {
-            this.owner.getHealedBy(HEALING_POWER);
-
+        public void cast(SceneFactory.Scene scene) {
+            owner.getHealedBy(HEALING_POWER);
         }
 
     }
 
     @Override
-    public Spell makeSpell() {
-        return null;
+    public Spell makeSpell(MagicianFactory.Magician magician) {
+        return new HealingSpell(magician);
     }
 }

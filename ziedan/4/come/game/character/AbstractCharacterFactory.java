@@ -1,22 +1,23 @@
 package come.game.character;
 
+import come.game.scene.SceneFactory;
+
 public abstract class AbstractCharacterFactory {
 
-    abstract static class Character {
+    public abstract static class Character {
         protected String name;
         protected int health = 100;
-
-        public void setCurrentPosition(int currentPosition) {
-            this.currentPosition = currentPosition;
-        }
-
-        protected int currentPosition;
+        protected int position;
 
         public Character(String name) {
             this.name = name;
         }
 
-        public abstract void attack(Character character);
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+        public abstract void attack(SceneFactory.Scene scene);
 
         public void getAttackedBy(int damage) {
             this.health -= damage;
@@ -31,6 +32,7 @@ public abstract class AbstractCharacterFactory {
             if (this.health > 100) {
                 this.health = 100;
             }
+            System.out.printf("%s исцелен на %s. Теперь у него %s здоровья", name, health, this.health);
         }
 
         public boolean isDead() {
@@ -45,10 +47,10 @@ public abstract class AbstractCharacterFactory {
             return health;
         }
 
-        public int getCurrentPosition() {
-            return currentPosition;
+        public int getPosition() {
+            return position;
         }
     }
 
-    public abstract Character makeCharacter(String name);
+    public abstract Character makeCharacter();
 }
