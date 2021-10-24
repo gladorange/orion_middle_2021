@@ -66,7 +66,7 @@ public class FixPriceShop {
 
         for (int i = 0; i < 24; i++) {
             if (shop1.checkItemPrice(currentItem1, i) == shop1.checkItemPrice(currentItem1, shop1.luckyHour)) {
-                System.out.println("Оптимальное время для покупки: " + shop1.checkItemPrice(currentItem1, i));
+                System.out.println("Оптимальное время для покупки: " + i);
                 shop1.buyItem(currentItem1, i);
                 break;
             }
