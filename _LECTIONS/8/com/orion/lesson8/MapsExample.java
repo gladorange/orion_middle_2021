@@ -1,7 +1,8 @@
-package com.orion.lesson7;
+package com.orion.lesson8;
+
+import static java.util.stream.Collectors.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,9 +36,17 @@ public class MapsExample {
         persons.add(new Person("Маша", "Тестироващик"));
         persons.add(new Person("Вика", "Тестироващик"));
 
-        final Map<String, List<Person>> collect = persons.stream()
-                .collect(Collectors.groupingBy(p -> p.profession));
 
-        System.out.println(collect);
+        for (Person person : persons) {
+            System.out.println(person);
+        }
+
+    /*    final Map<String, List<String>> collect = persons.stream()
+                .collect(
+                        groupingBy(p -> p.profession,
+                                mapping(person -> person.name, toList()))
+                );
+
+        System.out.println(collect);*/
     }
 }
