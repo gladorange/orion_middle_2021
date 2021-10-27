@@ -12,7 +12,7 @@ import static lection4.task1.Helper.DEFAULT_HEALTH_POINTS;
 
 public abstract class Character {
     private int healthPoints;
-    private String name;
+    private final String name;
 
     public Character(String name) {
         this.name = name;
