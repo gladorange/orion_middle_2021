@@ -31,7 +31,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.println(findBestPrice(fuelPrices, Gasoline92).toString());
+        System.out.println(findBestPrice(fuelPrices, Gasoline92));
     }
 
     public static Triple<String, FuelType, Double> findBestPrice(List<Triple<String, FuelType, Double>> prices, FuelType fuelType) {
