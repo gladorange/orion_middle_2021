@@ -2,33 +2,45 @@ package task1.interfaces;
 
 public interface CharacterFactory {
 
-    public interface Attack {
+    abstract class Character {
 
-        public void attack(CharacterFactory.Character[] characters , CharacterFactory.Character character);
-
-    }
-
-      abstract class Character implements Attack {
-
-        String name ;
         int health ;
-        Spell[] spellsBook ;
+        String name ;
+        protected String personType ;
 
-        public Character(String name, int health) {
-            this.name = name;
-            this.health = health;
-        }
+        public Character() {
+            this.health = 100;
+          }
 
-        public abstract void attack(Character[] characters ,Character character);
+        public void setName(String name) {
+              this.name = name;
+          }
+        public String getPersonType() {
+            return personType;
+            }
+        public int getHealth() {
+              return health;
+          }
+        public String getName() {return name;}
 
         public void reduceHealth(int points){
             this.health -= points;
         }
-
+        public void increaseHealth(int points){
+              this.health += points;
+              if(this.health > 100 ) {
+                  this.health = 100;
+              }
+          }
         public void setHealth(int points){
             this.health = points;
         }
-    }
 
-    public CharacterFactory.Character  createCharacter(String name, int health);
+        public abstract void attack(Character[] characters );
+
+      }
+
+    public CharacterFactory.Character  createCharacter();
+
+
 }

@@ -14,10 +14,9 @@ public enum Factories {
     Factories(CharacterFactory factory){
         this.factory = factory;
     }
+
     public CharacterFactory getFactory(){
         return this.factory;
     }
-
-
 
 }
