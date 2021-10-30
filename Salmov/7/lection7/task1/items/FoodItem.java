@@ -4,7 +4,7 @@ package lection7.task1.items;
  * дополнительное поля калорийность (calorieContent)
  * и срок годности в днях (shelfLife).
  */
-public class FoodItem extends ShopItem{
+public abstract class FoodItem extends ShopItem{
     private final Double calorieContent;
     private final Integer shelfLife;
 
@@ -21,4 +21,11 @@ public class FoodItem extends ShopItem{
     public Integer getShelfLife() {
         return shelfLife;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + String.format("калорийность:%.2fкКал, срок годности:%s дн., ",
+                calorieContent, shelfLife);
+    }
+
 }

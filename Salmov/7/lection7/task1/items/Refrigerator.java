@@ -2,6 +2,7 @@ package lection7.task1.items;
 
 /**
  * Дополнительное свойство - объем морозильной камеры (freezerVolume).
+ * Будем исчислять объём в литрах
  */
 public class Refrigerator extends ElectronicItem{
     private final Integer freezerVolume;
@@ -13,5 +14,16 @@ public class Refrigerator extends ElectronicItem{
 
     public Integer getFreezerVolume() {
         return freezerVolume;
+    }
+
+    @Override
+    public String getType() {
+        return "Холодильник";
+    }
+
+    @Override
+    public String toString() {
+        return "Холодильник(" + super.toString() +
+                "объём:" + freezerVolume + "л.)";
     }
 }

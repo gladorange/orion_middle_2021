@@ -16,4 +16,11 @@ public abstract class ShopItem {
     public Double getPrice() {
         return price;
     }
+
+    public abstract String getType();
+
+    @Override
+    public String toString() {
+        return String.format("%s, цена:%.2fр., ", name, price);
+    }
 }

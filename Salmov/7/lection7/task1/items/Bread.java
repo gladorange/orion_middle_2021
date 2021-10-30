@@ -14,4 +14,16 @@ public class Bread extends FoodItem{
     public Integer getWeight() {
         return weight;
     }
+
+    @Override
+    public String getType() {
+        return "Хлеб";
+    }
+
+    @Override
+    public String toString() {
+        return "Хлеб(" + super.toString() +
+                "вес:" + weight + "г.)";
+    }
+
 }

@@ -2,8 +2,9 @@ package lection7.task1.items;
 
 /**
  * дополнительное поле потребляемая мощность (powerConsumption).
+ * мощность будем исчислять в Ваттах
  */
-public class ElectronicItem extends ShopItem{
+public abstract class ElectronicItem extends ShopItem{
     private final Double powerConsumption;
 
     public ElectronicItem(String name, Double price, Double powerConsumption) {
@@ -13,5 +14,10 @@ public class ElectronicItem extends ShopItem{
 
     public Double getPowerConsumption() {
         return powerConsumption;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + String.format("мощность:%.2fВт, ", powerConsumption);
     }
 }
