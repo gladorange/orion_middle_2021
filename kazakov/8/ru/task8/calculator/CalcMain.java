@@ -25,6 +25,18 @@ public class CalcMain {
         calc.calculate("pow2", 3.51);
         calc.calculate("pow2", 4.0);
         calc.calculate("sqrt2", -4.0);
+        /*
+        На самом деле, я бы просто перегрузил метод add в калькуляторе,
+                add(String name, Function unary);
+        add(String name, BiFunction binary);
+
+        Общий код получился бы проще и надежнее.
+                А так - что будет если вызвать сумму с одним аргументом или корень - с двумя?
+                Если бы у тебя были разные функции - можно было бы проверить количество
+                аргументов и кинуть исключение.
+         */
+        calc.calculate("sum",  6.9);
+        calc.calculate("sqrt2", 4.0, 3.5);
     }
 }
 

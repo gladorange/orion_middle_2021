@@ -95,8 +95,8 @@ public class Calculator {
     void calculate(String operationName, Double a, Double b) {
 
         BiFunction<Double, Double, Double> biFunc = opsFuncs.get(operationName);
-        if (biFunc == null) {
-            System.out.println("Бинарная операция: '%s' в калькуляторе не найдена.");
+        if (biFunc == null || biFunc.apply(a, b) == null) {
+            System.out.printf("Бинарная операция: '%s' в калькуляторе не найдена\n", operationName);
             return;
         }
         System.out.printf("Операция: %s; операнд1 = %.2f,  операнд2 = %.2f, результат = %.2f\n",
@@ -107,8 +107,8 @@ public class Calculator {
     void calculate(String operationName, Double a) {
 
         Function<Double, Double> func = opsFuncs.get(operationName);
-        if (func == null) {
-            System.out.println("Унарная операция: '%s' в калькуляторе не найдена.");
+        if (func == null || func.apply(a) == null) {
+            System.out.printf("Унарная операция: '%s' в калькуляторе не найдена\n", operationName);
             return;
         }
         System.out.printf("Операция: %s; операнд: %.2f, результат: %.2f\n", operationName, a, func.apply(a));
