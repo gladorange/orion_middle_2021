@@ -13,7 +13,7 @@ public class LectureFactory {
         List<Lecture> lectures = new ArrayList<>();
 
         Stream.iterate(course.getStart(), d -> d.plusDays(1))
-                .limit(ChronoUnit.DAYS.between(course.getStart().atStartOfDay(), course.getEnd().plusDays(1).atStartOfDay()))
+                .takeWhile(d -> d.isBefore(course.getEnd()) || d.isEqual(course.getEnd()))
                 .filter(d -> course.getDaysOfWeek().contains(d.getDayOfWeek()))
                 .forEach(d -> lectures.add(new Lecture(course.getName(), d)));
 

@@ -11,7 +11,7 @@ public class Main {
         calc.add("exponent", Math::pow);
         calc.add("root", (a, b) -> Math.pow(a, 1/b));
 
-        System.out.println(calc.calculate("divide", 1.0, 0.0));
+        System.out.println(calc.calculate("multiply", 1.0, 2.0));
 
     }
 }
