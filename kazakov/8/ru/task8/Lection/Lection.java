@@ -2,23 +2,9 @@ package ru.task8.Lection;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
-enum Discipline {
-    MATH("матанализ"), PHILOSOPHY("философия"),
-    ENGLISH("английкий язык"), HISTORY("история"),
-    PHYSICAL("физкультура");
-
-    final private String name;
-
-    Discipline(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-}
+import java.util.concurrent.ThreadLocalRandom;
 
 /*
     Создайте класс Lection с полями : название, дата проведения.
@@ -34,23 +20,36 @@ class Lection {
         this.date = eventDate;
     }
 
-    public Discipline getName() {
+    public Discipline getDiscipline() {
         return discipline;
     }
 
     public LocalDate getEventDate() {
         return date;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lection lection = (Lection) o;
+        return discipline == lection.discipline &&
+                Objects.equals(date, lection.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(discipline, date);
+    }
 }
 
 //  Создайте класс Student с полями имя (строка) и список посещенных курсов в формате Set<Lection>.
 class Student {
     private final String name;
-    private final Set<Lection> lections;
+    private final Set<Lection> lections = new HashSet<>();
 
-    public Student(String name, Set<Lection> lections) {
+    public Student(String name) {
         this.name = name;
-        this.lections = lections;
     }
 
     public Set<Lection> getLections() {
@@ -60,5 +59,25 @@ class Student {
     public String getName() {
         return name;
     }
-}
 
+    /**
+     * feedWithLections ()
+     * набиваем посещаемость Студента за сегодня
+     * случайный набор Дисциплин, который посетил данный студент за сегодня
+     */
+    void feedWithLections(LocalDate date) {
+        //  проходимся случайно по всем дисциплинам и заполняем посещаемость на сегодня:
+        for (Discipline ignored : Discipline.values()) {
+            //  добавляем новую (случайную) прослушанную Дисциплину в Set посещённых для нашего студента:
+            lections.add(new Lection(Discipline.values()[ThreadLocalRandom.current().nextInt(0, Discipline.values().length)], date));
+        }
+    }
+
+    /**
+     * DumpLections - helper method
+     * вываливаем в консоль список лекций , который посетил данный студент:
+     */
+    void DumpLections() {
+        lections.forEach(l -> System.out.printf("'%s' посетил '%s' лекцию: %s\n", name, l.getEventDate(), l.getDiscipline()));
+    }
+}
