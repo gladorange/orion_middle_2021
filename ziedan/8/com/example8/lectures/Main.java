@@ -3,6 +3,7 @@ package com.example8.lectures;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
@@ -69,13 +70,29 @@ public class Main {
 
         courseWithMaxAttendance(students);
 
-        attendedAllLecturesOnDay(students, lectures, LocalDate.of(2021, 9, 1));
+        attendedMaxLecturesADay(students);
 
         System.out.println("5. название курсов - количество разных студентов, которые посетили хотя бы одно занятие.");
         for (Course course : courses) {
             countStudentsAtLeastAttendedOnce(students, course);
         }
 
+    }
+
+    private static void attendedMaxLecturesADay(List<Student> students) {
+        System.out.println("4. Имена студентов, которые посетили наибольшее количество лекций в день.");
+
+        // Думаю не очень читабильно...
+        Map.Entry<Long, List<Student>> longListEntry = students.stream()
+                .collect(groupingBy(student -> student.getAttendedLectures().stream()
+                        .collect(groupingBy(Lecture::getDate, counting()))
+                        .values().stream().max(Comparator.comparingLong(value -> value)).orElse(0L)))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByKey())
+                .orElse(new AbstractMap.SimpleEntry<>(0L, new ArrayList<>())); // in case of null
+
+
+        System.out.printf("Кол-во лекции: %s - Студенты: %s%n", longListEntry.getKey(), longListEntry.getValue().stream().map(Student::getName).collect(toList()));
     }
 
     private static void simulateAttendance(List<Lecture> lectures, List<Student> students) {
@@ -87,17 +104,6 @@ public class Main {
                 }
             }
         }
-    }
-
-    private static void attendedAllLecturesOnDay(List<Student> students, List<Lecture> lectures, LocalDate day) {
-        List<Lecture> lecturesOnDay = lectures.stream().filter(lecture -> lecture.getDate().equals(day)).collect(toList());
-        List<String> studentList = students.stream()
-                .filter(student -> student.getAttendedLectures().containsAll(lecturesOnDay))
-                .map(Student::getName)
-                .collect(toList());
-
-        System.out.println("4. Имена студентов, которые посетили наибольшее количество лекций в день.");
-        System.out.println(studentList);
     }
 
     private static void countStudentsAtLeastAttendedOnce(List<Student> students, Course course) {
