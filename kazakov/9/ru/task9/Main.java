@@ -114,7 +114,7 @@ public class Main {
             Создайте класс, который может читать любой объект в формате XML.
             например ,deserialize(<пример выше>, Person.class) вернет экземпляр Person{name="Vasya",age=12,password=null}
              */
-            Student clonedKath = (Student) jsonSerial.fromJsOn(json, Student.class);
+            Student clonedKath = jsonSerial.fromJsOn(json, Student.class);
             assert (clonedKath != null);
             System.out.println(clonedKath);
 
