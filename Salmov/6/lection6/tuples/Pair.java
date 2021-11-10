@@ -31,4 +31,12 @@ public class Pair <T, V>{
     public int hashCode() {
         return Objects.hash(getFirst(), getSecond());
     }
+
+    @Override
+    public String toString() {
+        return "\nPair{" +
+                "first=" + first +
+                ", second=" + second +
+                '}';
+    }
 }
