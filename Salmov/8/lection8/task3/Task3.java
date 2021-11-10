@@ -4,9 +4,6 @@ package lection8.task3;
 //Потоковые лекции
 //Салмов Евгений
 
-import lection6.tuples.Pair;
-import lection6.tuples.Triple;
-
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
