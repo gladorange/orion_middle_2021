@@ -84,11 +84,12 @@ public class JsOnSerializer implements AutoCloseable {
      *
      * @return deSerialized Object or null
      */
-    public Object fromJsOn(String json, Class<?> className)
-            throws InstantiationException, IllegalAccessException, NoSuchMethodException,
+    public <T> T fromJsOn(String json, Class<T> className)
+
+    throws InstantiationException, IllegalAccessException, NoSuchMethodException,
             InvocationTargetException, IllegalStateException {
 
-        Object object = className.getDeclaredConstructor().newInstance();
+        T object = className.getDeclaredConstructor().newInstance();
 
         JsonTypeName classNameAnnotation = className.getAnnotation(JsonTypeName.class);
         final String mainTagName = classNameAnnotation != null ? classNameAnnotation.value() : className.getSimpleName();
