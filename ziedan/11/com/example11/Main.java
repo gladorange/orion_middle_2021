@@ -48,13 +48,6 @@ public class Main {
 
     }
 
-    private static void logTimeConsumed(Runnable f, String operationName) {
-        LocalDateTime start = LocalDateTime.now();
-        f.run();
-        long durationInSeconds = ChronoUnit.SECONDS.between(start, LocalDateTime.now());
-        System.out.printf("Operation \"%s\" took %s seconds to finish %n", operationName, durationInSeconds);
-    }
-
     private static void loadSequentially(List<String> links) throws IOException {
         System.out.println("\n=== starting downloading sequentially ===\n");
         LocalDateTime start = LocalDateTime.now();
