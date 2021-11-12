@@ -1,6 +1,6 @@
-package task1.classes;
+package classes;
 
-import task1.enums.Notices;
+import enums.Notices;
 import task1.interfaces.CharacterFactory;
 import java.util.concurrent.ThreadLocalRandom;
 

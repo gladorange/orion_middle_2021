@@ -1,7 +1,7 @@
-package task1.enums;
+package enums;
 
-import task1.classes.MonsterFactory;
-import task1.classes.WizardFactory;
+import classes.MonsterFactory;
+import classes.WizardFactory;
 import task1.interfaces.CharacterFactory;
 
 public enum Factories {

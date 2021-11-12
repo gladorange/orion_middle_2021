@@ -1,4 +1,4 @@
-package task1.enums;
+package enums;
 
 public enum Notices {
     SCENE_WAS_CREATED("Сцена подготовлена \n"),
