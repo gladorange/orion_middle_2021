@@ -1,12 +1,13 @@
 package ru.task10;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,22 +18,29 @@ enum CommandExecCode {
 }
 
 class CommandReturnInfo {
-    final Set<CommandExecCode> codes;
-    List<String> messages;
+    final Set<CommandExecCode> codes = new HashSet<>();
+    final List<String> messages = new ArrayList<>();
 
-    CommandReturnInfo(Set<CommandExecCode> codes, List<String> messageList) {
-        this.codes = codes;
-        this.messages = messageList;
+    /*
+    Чтобы постоянно не писать Arrays.asList можно было бы: Сделать аргумент var-arg'ом
+    Перегрузить конструктор, чтобы принимал одничное значение,
+    а не коллекцию. и из перегруженного конструктора вызвать конструктор с коллекцией в качестве аргумента.
+     */
+    CommandReturnInfo(List<String> list, CommandExecCode... codesArr) {
+        this.messages.addAll(list);
+        Collections.addAll(codes, codesArr);
     }
 
-    CommandReturnInfo(Set<CommandExecCode> codes, String message) {
-        this.codes = codes;
-        this.messages = new ArrayList<>(List.of(message));
+    CommandReturnInfo(String message, CommandExecCode... codesArr) {
+        this.messages.add(message);
+        Collections.addAll(codes, codesArr);
+    }
+
+    CommandReturnInfo(CommandExecCode... codesArr) {
+        Collections.addAll(codes, codesArr);
     }
 
     boolean containsCode(CommandExecCode code) {
-        if (codes == null)
-            return false;
         return codes.contains(code);
     }
 
@@ -63,128 +71,123 @@ public class CommandFactory {
 }
 
 abstract class Command {
-    abstract CommandReturnInfo exec(String option, String argument);
+    abstract CommandReturnInfo exec(String args);
 }
 
 class QuitCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
-        //  actually do nothing, set and return 'EXIT' error code:
-        return new CommandReturnInfo(new HashSet<>(Collections.singletonList(EXIT)), "");
+    CommandReturnInfo exec(String args) {
+        //  actually do nothing, only return 'EXIT' error code:
+        return new CommandReturnInfo(EXIT);
     }
 }
 
 class PwdCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
-        return new CommandReturnInfo(new HashSet<>(Collections.singletonList(OUTPUT)), System.getProperty("user.dir"));
+    CommandReturnInfo exec(String args) {
+        return new CommandReturnInfo(System.getProperty("user.dir"), OUTPUT);
     }
 }
 
 class ChangeDirCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
+    CommandReturnInfo exec(String args) {
         try {
-            System.setProperty(("user.dir"), option);
+            System.setProperty(("user.dir"), args);
             //  example of command with no output:
-            return new CommandReturnInfo(null, "");
+            return new CommandReturnInfo();
         } catch (Exception e) {
-            return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)), e.getMessage());
+            return new CommandReturnInfo(e.getMessage(), ERROR, OUTPUT);
         }
     }
 }
 
 class CreateFileCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
+    CommandReturnInfo exec(String args) {
         try {
             //  check argument (filename) for our command and return with error if it doesn't exist:
-            if (option == null || option.length() == 0) {
-                return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)),
-                        "you must specify filename to create");
+            if (args == null || args.length() == 0) {
+                return new CommandReturnInfo("you must specify filename to create", ERROR, OUTPUT);
             }
-            Files.createFile(Paths.get(option));
-            return new CommandReturnInfo(new HashSet<>(), "");
+            Files.createFile(Paths.get(args));
+            return new CommandReturnInfo();
         } catch (Exception e) {
-            return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)), e.getMessage());
+            return new CommandReturnInfo(e.getMessage(), ERROR, OUTPUT);
         }
     }
 }
 
 class RemoveFileCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
+    CommandReturnInfo exec(String args) {
         try {
-            if (!Files.isReadable(Paths.get(option))) {
-                return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)),
-                        "file must exist on system");
+            if (!Files.isReadable(Paths.get(args))) {
+                return new CommandReturnInfo("file must exist on system", ERROR, OUTPUT);
             }
-            Files.delete(Paths.get(option));
-            return new CommandReturnInfo(new HashSet<>(), "");
+            Files.delete(Paths.get(args));
+            return new CommandReturnInfo();
         } catch (Exception e) {
-            return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)), e.getMessage());
+            return new CommandReturnInfo(e.getMessage(), ERROR, OUTPUT);
         }
     }
 }
 
 class ListFilesCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
+    CommandReturnInfo exec(String args) {
         try {
-            final String dir;
-            if (option == null) {
-                dir = System.getProperty("user.dir");
-            } else {
-                dir = option;
-            }
+
+            final String dir = args == null ? System.getProperty("user.dir") : args;
             //  check if directory exists:
             if (!Files.isReadable(Paths.get(dir))) {
-                return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)),
-                        "directory must exist on system");
+                return new CommandReturnInfo("directory must exist on system", ERROR, OUTPUT);
             }
             List<String> messages =
                     Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
                             .map(File::getName)
                             .collect(Collectors.toList());
-            return new CommandReturnInfo(new HashSet<>(Collections.singletonList(OUTPUT)), messages);
+            return new CommandReturnInfo(messages, OUTPUT);
         } catch (Exception e) {
-            return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)), e.getMessage());
+            return new CommandReturnInfo(e.getMessage(), ERROR, OUTPUT);
         }
     }
 }
 
 class AppendToFileCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
+    CommandReturnInfo exec(String arg) {
         try {
-            if (option == null || argument == null) {
-                return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)),
-                        "not enough arguments, usage: 'append \"some_text_info\" filename'");
+            if (arg == null) {
+                return new CommandReturnInfo("not enough arguments, usage: 'append \"some_text_info\" filename'", ERROR, OUTPUT);
             }
+
+            //  extract option and argument for command:
+            Pattern p = Pattern.compile("(.+?) +(.*)");
+            Matcher matcher = p.matcher(arg);
+            if (!matcher.find())
+                throw new IllegalStateException();
+
             //  1. check if file exists and writable:
-            final Path path = Paths.get(argument);
+            final Path path = Paths.get(matcher.group(2));
             if (!Files.isReadable(path) || !Files.isWritable(path)) {
-                return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)),
-                        "file must exist on system and must be writable");
+                return new CommandReturnInfo("file must exist on system and must be writable", ERROR, OUTPUT);
+
             }
+            Files.write(path, matcher.group(1).getBytes(), StandardOpenOption.APPEND);
 
-            //  2. append to existing file:
-            BufferedWriter writer = new BufferedWriter(new FileWriter(argument, true));
-            writer.append(option);
-            writer.close();
-
-            return new CommandReturnInfo(new HashSet<>(), "");
+            return new CommandReturnInfo();
         } catch (Exception e) {
-            return new CommandReturnInfo(new HashSet<>(Arrays.asList(ERROR, OUTPUT)), e.getMessage());
+            return new CommandReturnInfo(e.getMessage(), ERROR, OUTPUT);
         }
     }
 }
 
 class HelpCommand extends Command {
 
-    CommandReturnInfo exec(String option, String argument) {
+    CommandReturnInfo exec(String args) {
         List<String> helpMessages = new ArrayList<>(Arrays.asList(
-                "A tiny command line interpreter v.0.9, written in Java. use it at your own risk.",
+                "A tiny command line interpreter v.1.0, written in Java. use it at your own risk.",
                 "посмотреть текущую директорию:          pwd",
                 "сменить текущую директорию:             cd newdir",
                 "создать файл,                           cf file.txt",
@@ -195,6 +198,6 @@ class HelpCommand extends Command {
                 "выход:                                  quit or exit or qq",
                 "помощь (выводит данное собщение):       help"
         ));
-        return new CommandReturnInfo(new HashSet<>(Collections.singletonList(OUTPUT)), helpMessages);
+        return new CommandReturnInfo(helpMessages, OUTPUT);
     }
 }
