@@ -1,9 +1,9 @@
 
 package ru.task10;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static ru.task10.CommandExecCode.*;
 
@@ -32,35 +32,51 @@ public class Main {
             //  show system prompt:
             System.out.print(">");
 
-            //  get new command from user input:
-            //  в более продвинутой версии мы д.использовать парсинг аргументов и опций введённой команды с помощью regex:
-            ArrayList<String> cmndInput = new ArrayList<>(Arrays.asList(keyboard.nextLine().split(" ")));
-            final String commandName = cmndInput.get(0);
-            if (commandName.length() == 0) {
-                continue;   //  empty input (⏎ Enter pressed), just show one more system prompt
-            }
-            Command command = commandFactory.getCommand(commandName);
-            if (command == null) {
-                System.out.printf("'%s' not found. Type 'help' for help\n", commandName);
-                continue;
-            }
+            try {
+                //  get new command from user input:
+                final String input = keyboard.nextLine();
+                if (input.length() == 0) {
+                    continue;   //  empty input (⏎ Enter pressed), just show one more system prompt
+                }
 
-            //  === extract at maximum 1 option and 1 argument (a very simplest and limited case): ===
-            final String option = cmndInput.size() > 1 ? cmndInput.get(1) : null;
-            final String argument = cmndInput.size() > 2 ? cmndInput.get(2) : null;
-            //  exec user command:
-            CommandReturnInfo returnCode = command.exec(option, argument);
+                Pattern p = Pattern.compile("(.+?) +(.*)|(.+)");    //  regex ужасно кривой но хоть как то работает ^) потом сделаю лучше
+                Matcher matcher = p.matcher(input);
+                if (!matcher.find())
+                    throw new IllegalStateException();
 
-            //  process command return code and output:
-            if (returnCode.containsCode(ERROR)) {
-                System.out.printf("An error occurred while executing command '%s': ", commandName);
-            }
-            if (returnCode.containsCode(OUTPUT)) {
-                returnCode.getMessages().forEach(System.out::println);
-            }
-            if (returnCode.containsCode(EXIT))
+                //  get command name:
+                String commandName = null;
+                final String grpOne = matcher.group(1);
+                final String grpThree = matcher.group(3);
+                if (grpOne != null) {
+                    commandName = grpOne;
+                } else if (grpThree != null) {
+                    commandName = grpThree;
+                }
+                Command command = commandFactory.getCommand(commandName);
+                if (command == null) {
+                    System.out.printf("'%s' not found. Type 'help' for help\n", commandName);
+                    continue;
+                }
+
+                //  extract options & arguments for command as a single value. Let handle the extracted string by the commands:
+                CommandReturnInfo returnCode = command.exec(matcher.group(2));
+
+                //  process command return code and output:
+                if (returnCode.containsCode(ERROR)) {
+                    System.out.printf("An error occurred while executing command '%s': ", commandName);
+                }
+                if (returnCode.containsCode(OUTPUT)) {
+                    returnCode.getMessages().forEach(System.out::println);
+                }
+                if (returnCode.containsCode(EXIT))
+                    return;
+
+            } catch (Exception e) {
+                System.out.printf("Произошло исключение! сообщение: %s\n", e.getMessage());
+                e.printStackTrace();
                 return;
-
+            }
         }
     }
 }
