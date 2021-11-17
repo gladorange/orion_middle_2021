@@ -1,4 +1,4 @@
-package task1.enums;
+package enums;
 
 public enum Wizards {
 

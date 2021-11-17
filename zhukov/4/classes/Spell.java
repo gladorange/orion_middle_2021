@@ -1,7 +1,6 @@
-package task1.classes;
+package classes;
 
-import task1.enums.SpellLibrary;
-import task1.interfaces.CharacterFactory;
+import enums.SpellLibrary;
 import task1.interfaces.CharacterFactory.Character;
 
 public class Spell{

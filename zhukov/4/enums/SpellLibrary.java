@@ -1,8 +1,8 @@
-package task1.enums;
+package enums;
 
-import task1.classes.Spell;
-import task1.classes.SpellStrategy;
-import task1.classes.SpellStrategy.*;
+import classes.Spell;
+import classes.SpellStrategy;
+import classes.SpellStrategy.*;
 
 public enum SpellLibrary {
 

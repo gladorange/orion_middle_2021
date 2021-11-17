@@ -1,8 +1,8 @@
-package task1.classes;
+package classes;
 
-import task1.enums.Notices;
-import task1.enums.SpellLibrary;
-import task1.enums.Wizards;
+import enums.Notices;
+import enums.SpellLibrary;
+import enums.Wizards;
 import task1.interfaces.CharacterFactory;
 
 import java.util.ArrayList;
