@@ -1,10 +1,10 @@
 package task1;
 
-import task1.classes.Notifier;
-import task1.classes.Scene;
+import classes.Notifier;
+import classes.Scene;
 
-import task1.classes.WizardFactory;
-import task1.enums.Notices;
+import classes.WizardFactory;
+import enums.Notices;
 import task1.interfaces.CharacterFactory;
 
 import java.util.Arrays;
