@@ -1,0 +1,45 @@
+1. Создайте Maven проект
+2. Добавьте зависимость на
+  <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+
+3. Сделайте
+создайте классы с данными
+Dog - имя, громкость гавканья
+Cat - имя, громкость мурчания
+ОБратите внимание, что общий класс Animal делать необязательно
+
+Создайте два репозитория (@Repository)
+CatRepository - найти всех котов, найти кота по имени
+DogRepository - найти всех собак, найти собаку по имени
+репозитории могут хранить элементы где угодно:  в памяти, в файле, в БД.
+
+создайте AnimalService (@Service), который зависит от CatRepository и DogRepository
+создайте в нем методы:
+- Найти самых громких собак
+- Найти самых тихих кошек
+- найти собаку по имени
+- найти кошку по имени
+- найти всех собак
+- найти всех кошек
+
+Создайте класс AnimalView - консольное приложение.
+AnimalView зависит от AnimalService
+Когда AnimalView запускается - оно спрашивает у пользователя что он хочет сделать с сервисом (предлагает ввести имя метода),
+выполняет указанный метод и выводит ответ в консоль.
+
+Создайте ZooConfiguration и включить ComponentScan, чтобы оа нашла репозитории, сервисы и view
+создайте AnnotationConfigApplication context и убедитесь, что AnimalView запускается и работает правильно.
+
+
+
