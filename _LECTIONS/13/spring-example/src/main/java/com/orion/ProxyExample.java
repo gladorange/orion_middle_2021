@@ -39,11 +39,8 @@ public class ProxyExample {
 
     public static void main(String[] args) {
         ShopService shop = getShopService("Пятерочка", Arrays.asList("Молоко", "Хлеб", "Сигареты"));
-        ShopService shop1 = getShopService("Магнит", Arrays.asList("Мороженое", "Сигареты"));
         System.out.println(shop.getItems());
         System.out.println(shop.getShopName());
-        System.out.println(shop1.getItems());
-        System.out.println(shop1.getShopName());
 
     }
 

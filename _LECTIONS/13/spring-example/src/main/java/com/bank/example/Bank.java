@@ -1,10 +1,6 @@
 package com.bank.example;
 
 
-import org.springframework.scheduling.annotation.Async;
-
-import lombok.SneakyThrows;
-
 public class Bank {
 
 
@@ -55,12 +51,8 @@ public class Bank {
 
         b.transferBetweenPersons(1L,2L,200);
         System.out.println(b.getAllMoney());
-    }
 
-    @SneakyThrows
-    @Async
-    public void asyncExecution() {
-        Thread.sleep(5000);
-        System.out.println("async");
+
+
     }
 }

@@ -37,11 +37,4 @@ public class PersonnelDepartment {
                 .findAny()
                 .orElseThrow(NoSuchElementException::new);
     }
-    public Client findByIdAndName(long id, String name) {
-        return clients.stream()
-                .filter(c -> c.getId() == id)
-                .filter(c -> c.getName().equals(name))
-                .findAny()
-                .orElseThrow(NoSuchElementException::new);
-    }
 }
