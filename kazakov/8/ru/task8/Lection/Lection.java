@@ -73,11 +73,11 @@ class Student {
         }
     }
 
-    /**
+    /*
      * DumpLections - helper method
      * вываливаем в консоль список лекций , который посетил данный студент:
-     */
     void DumpLections() {
         lections.forEach(l -> System.out.printf("'%s' посетил '%s' лекцию: %s\n", name, l.getEventDate(), l.getDiscipline()));
     }
+     */
 }
