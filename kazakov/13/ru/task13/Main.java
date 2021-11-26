@@ -16,7 +16,7 @@ public class Main {
             urls.add(new  URL("https://greenpeacefund.org"));
             urls.add(new URL("http://www.swim-rt.ru"));
 
-            //Map<Character, Long> mapa =
+            //java.util.Map<Character, Long> mapa =
                     urlContentQuantifier.quantifyUrls(urls);
             //urlContentQuantifier.getCountSpecialChars(mapa).forEach((key, value) -> System.out.printf("%s : %d\n", key, value));
             //System.out.println(urlContentQuantifier.countSpecialChars(mapa));
