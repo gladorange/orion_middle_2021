@@ -1,35 +1,13 @@
 package ru.task8.Lection;
 
-import java.sql.Struct;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
-import static ru.task8.Lection.Discipline.*;
+import static ru.task8.Lection.Discipline.MATH;
 
 public class LectionMain {
-
-    static class Person {
-        public String name;
-        public String profession;
-
-        public Person(String name, String profession) {
-            this.name = name;
-            this.profession = profession;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getProfession() {
-            return profession;
-        }
-    }
 
     public static void main(String[] args) {
 
@@ -47,72 +25,92 @@ public class LectionMain {
         studentsFaculty.forEach(s -> s.feedWithLections(LocalDate.now()));
         //studentsFaculty.forEach(Student::DumpLections);
 
+        /*
         //  Теперь проведем аналитику:
         //  Для всех заданий используй students.stream() и операции с потоками.
         //  1. Выведите список студентов, которые хоть раз посещали матанализ.
-        System.out.println("--- список студентов, которые хоть раз посещали матанализ ---");
-        studentsFaculty.stream()
-            .filter(s -> {
-                for (Lection lection : s.getLections())
-                    if (lection.getDiscipline().equals(MATH))
-                        return true;
-                return false;
-                })
-            .collect(Collectors.toList())
-            .forEach(x -> System.out.println(x.getName()));
+        Я говорил на лекции, что со стримами удобнее работать, если все операции внутри стрима вынести в отдельный метод
+        здесь можно использовать s.getLections.stream.anyMatch Лекция №8
+        ...
+        смысла в collect() сразу перед forEach особого нет, можно вызвать forEach на стриме с тем же результатом.
+        */
+        System.out.println("--- 1. список студентов, которые хоть раз посещали матанализ ---");
+         studentsFaculty.stream()
+                .filter(s -> s.getLections().stream().anyMatch(l->l.getDiscipline().equals(MATH)))
+                .forEach(x -> System.out.println(x.getName()));
 
-        //  2. Выведите статистику посещений для каждого студентам в формате: имя - количество посщенных лекций.
-        System.out.println("--- имя - количество посщенных лекций: ---");
-        studentsFaculty.stream()
-            .collect(groupingBy(Student::getName, Collectors.summingLong(s -> s.getLections().size())))
-            .forEach((k,v)->System.out.println(k + " - посетил лекций: " + v));
+        /*
+         *  2. Выведите статистику посещений для каждого студентам в формате: имя - количество посщенных лекций.
+        Это было задание-ловушка :) Можно было бы сделать проще так:
+        studentsFaculty.forEach(s -> print(s.name + " " + s.getLections().size))        */
+        System.out.println("--- 2. имя - количество посщенных лекций: ---");
+        studentsFaculty.forEach(s -> System.out.println(s.getName() + ": " + s.getLections().size()));
 
-        //  3. Выведите название дисциплин, имеющих наибольшее количество посещений.
-        //  Если два разных студента посещают одну лекцию в один день, то это считается как два посещения.
-        //  ===  ПОКА СДЕЛАЛ РЕШЕНИЕ ОБЫЧНЫМ ЦИКЛОМ: ===
-        System.out.println("--- дисциплины, имеющие наибольшее количество посещений: ---");
-        final Map<Discipline, Integer> discAttend = new HashMap<>();
-        int count;
-        for (Discipline disc : Discipline.values()) {
-            count = 0;
-            for (Student student : studentsFaculty) {
-                for (Lection lection : student.getLections()) {
-                    if (lection.getDiscipline().equals(disc)) {
-                        count++;
-                    }
-                }
-            }
-            discAttend.put(disc, count);
-        }
-        discAttend.entrySet().stream()
-                .sorted(Map.Entry.<Discipline, Integer>comparingByValue().reversed())
+        /*  3. Выведите название дисциплин, имеющих наибольшее количество посещений.
+         *  Если два разных студента посещают одну лекцию в один день, то это считается как два посещения.
+         * (Можно было бы сделать через flatMap и группировку.)
+         */
+        System.out.println("--- 3. дисциплины, имеющие наибольшее количество посещений: ---");
+        Map<Discipline, Long> disciplinesAttended = studentsFaculty.stream()
+                .flatMap(student -> student.getLections().stream())
+                .collect(groupingBy(Lection::getDiscipline, Collectors.counting()));
+
+        Long discAttendsAndThen = studentsFaculty.stream()
+                .flatMap(student -> student.getLections().stream())
+                .collect(Collectors.collectingAndThen(groupingBy(Lection::getDiscipline, Collectors.counting()),
+                        attends -> Collections.max(attends.values())));
+        //disciplinesAttended.forEach((x, y) -> System.out.printf("%s %s\n", x.getName(), y));
+
+        //  фильтруем и выводим дисциплины имеющие максимальное кол-во посещений:
+        disciplinesAttended.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(discAttendsAndThen))
                 .forEach(System.out::println);
 
+
+        /*
         //  4. Выведите имена студентов, которые посетили наибольшее количество лекций в день
-        System.out.println("--- студенты, которые посетили наибольшее количество лекций в день: ---");
-            studentsFaculty.stream()
-                .sorted(Comparator.comparing(s -> s.getLections().size(), Comparator.reverseOrder()))
-                .collect(Collectors.toList())
-                .forEach(x-> System.out.printf("%s посетил: %d лекций\n", x.getName(), x.getLections().size())); //output 2 6 10 14
+         */
+        System.out.println("--- 4. имена студентов, которые посетили наибольшее количество лекций в день: ---");
 
-       //   5. Выведите статистику по курсам в формате:
-       //    название курсов - количество разных студентов, которые посетили хотя бы одно занятие. (т.е. в лучшем случае это будет 10)
-        //  ===  ПОКА СДЕЛАЛ РЕШЕНИЕ ОБЫЧНЫМ ЦИКЛОМ: ===
-        System.out.println("---  название курсов - количество разных студентов, которые посетили хотя бы одно занятие: ---");
-        final Map<Discipline, Integer> discStudents = new HashMap<>();
-        int cnt;
-        for (Discipline disc : Discipline.values()) {
-            cnt = 0;
-            for (Student student : studentsFaculty) {
-                for (Lection lection : student.getLections()) {
-                    if (lection.getDiscipline().equals(disc)) {
-                        cnt++;
-                    }
-                }
-            }
-            discStudents.put(disc, cnt);
+        Long maxAttendsInDay = studentsFaculty.stream()
+                .map(student -> maxAttends(student.getLections()))
+                .max(Long::compareTo)
+                .orElse(null);
+
+        List<String> students = studentsFaculty.stream()
+                .filter(student -> maxAttends(student.getLections()).equals(maxAttendsInDay))
+                .map(Student::getName)
+                .collect(Collectors.toList());
+        System.out.printf("Студенты: %s посетили в день max кол-во лекций: %d\n", students, maxAttendsInDay);
+
+        /*
+        //   5. Выведите статистику по курсам в формате:
+        //    название курсов - имена разных студентов, которые посетили хотя бы одно занятие. (т.е. в лучшем случае это будет 10)
+        //  набор всех лекций (дисциплин):
+         */
+        System.out.println("--- 5. названия курсов - имена студентов, посетивших  хотя бы одно занятие: ---");
+        Set<Discipline> disciplines =
+                studentsFaculty.stream()
+                        .flatMap(student -> student.getLections().stream().map(Lection::getDiscipline))
+                        .collect(Collectors.toSet());
+
+        final Map<Discipline, List<String>> studensOnDiscipline = new HashMap<>();
+        for (Discipline discipline : disciplines) {
+            List<String> students2 =
+            studentsFaculty.stream()
+                    .filter(s -> s.getLections().stream().anyMatch(l -> l.getDiscipline().equals(discipline)))
+                    .map(Student::getName)
+                    .collect(Collectors.toList());
+            studensOnDiscipline.put(discipline, students2);
         }
-        discStudents.entrySet().stream()
-                .forEach(System.out::println);
+        studensOnDiscipline.forEach((x, y) ->  System.out.printf("%s %s\n", x.getName(), y));
+    }
+
+    private static Long maxAttends(Set<Lection> lections) {
+        return lections.stream()
+                .collect(Collectors.collectingAndThen(
+                        groupingBy(Lection::getEventDate, Collectors.counting()),
+                        attends -> Collections.max(attends.values())));
     }
 }
+
