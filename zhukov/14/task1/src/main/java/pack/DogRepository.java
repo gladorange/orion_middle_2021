@@ -15,7 +15,7 @@ public class DogRepository {
 
     public List<Dog> findAllInstances(){
         List<Dog> dogList = new ArrayList<>();
-        dogList.add(new Dog("Gav",4));
+        dogList.add(new Dog("Myau",4));
         dogList.add(new Dog("Belka",70));
         dogList.add(new Dog("Strelka",73));
         dogList.add(new Dog("Charly",12));
