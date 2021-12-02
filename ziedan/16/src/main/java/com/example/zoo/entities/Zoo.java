@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Zoo {
 
     @Id
@@ -20,3 +20,5 @@ public class Zoo {
     String name;
 
 }
+
+

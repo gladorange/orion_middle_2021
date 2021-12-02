@@ -7,8 +7,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class ZooKeeper {
 

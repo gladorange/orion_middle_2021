@@ -7,9 +7,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Animal {
 
     @Id
@@ -23,3 +23,4 @@ public class Animal {
     Zoo zoo;
 
 }
+

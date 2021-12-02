@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -24,6 +25,12 @@ public class ApplicationService {
                 zooService.createAnimal(new AnimalDto(null, faker.animal().name(), zoo));
                 zooService.createZooKeeper(new ZooKeeperDto(null, faker.name().fullName(), faker.job().position(), zoo));
             }
+        }
+
+        List<Zoo> zoos = zooService.findAllZoos();
+        for (Zoo zoo : zoos) {
+            zooService.findAllZooKeepersInZoo(zoo).forEach(System.out::println);
+            zooService.findAllAnimalsInZoo(zoo).forEach(System.out::println);
         }
 
     }

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,4 +43,17 @@ public class ZooService {
         return zooKeeperRepository.save(zooKeeper);
     }
 
+    @Transactional
+    public List<Zoo> findAllZoos() {
+        return zooRepository.findAll();
+    }
+
+    @Transactional
+    public List<ZooKeeper> findAllZooKeepersInZoo(Zoo zoo) {
+        return zooKeeperRepository.findAllByZoo(zoo);
+    }
+
+    public List<Animal> findAllAnimalsInZoo(Zoo zoo) {
+        return animalRepository.findAllByZoo(zoo);
+    }
 }
