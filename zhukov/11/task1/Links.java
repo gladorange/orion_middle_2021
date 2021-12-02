@@ -35,7 +35,7 @@ public class Links {
         links.add("https://www.expatistan.com/cost-of-living");
         links.add("https://fires.ru/");
         links.add("https://fixmyspeakers.com/");
-        final long  start = System.nanoTime();
+
         //df.now
 /*
         StringBuilder sb = new StringBuilder();
@@ -61,8 +61,13 @@ public class Links {
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(sb.toString().getBytes(StandardCharsets.UTF_8));
 
-        */
-        
+ */
+        StraightSync ss = new StraightSync(links);
+        ss.run();
+
+
+        final long  start = System.nanoTime();
+
         final ExecutorService es = Executors.newFixedThreadPool(20);
 
         long startTime = System.nanoTime();
@@ -104,7 +109,7 @@ public class Links {
         }
 
         long calculatingTime =   TimeUnit.SECONDS.convert( System.nanoTime() - start, TimeUnit.NANOSECONDS);
-        System.out.println("It took "+ calculatingTime +" sec. ");
+        System.out.println("It took "+ calculatingTime +" sec. " + file.length());
         //System.out.println("Weight "+ bytes +" bytes ");
 
 
